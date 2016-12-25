@@ -1,0 +1,47 @@
+buildscript {
+    ext {
+        springBootVersion = '1.4.3.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('com.h2database:h2')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = 1.8
+
+//noinspection GroovyUnusedAssignment
+targetCompatibility = 1.8
+
+jar {
+    baseName = 'tutorial-001'
+    version = '1.0.0-SNAPSHOT'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+

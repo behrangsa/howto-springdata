@@ -1,0 +1,1 @@
+INSERT INTO person(external_id, first_name, last_name, date_of_birth) VALUES (1234, 'Tin', 'Tin', '2000-01-01');
