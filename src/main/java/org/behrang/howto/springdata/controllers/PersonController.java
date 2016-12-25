@@ -31,12 +31,12 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public Person getPerson(final @PathVariable Long id) {
+    public Person getPerson(@PathVariable Long id) {
         return personRepository.findOne(id);
     }
 
     @PutMapping(value = "/{person}")
-    public Person savePerson(final @ModelAttribute Person person) {
+    public Person savePerson(@ModelAttribute Person person) {
         return personRepository.save(person);
     }
 
