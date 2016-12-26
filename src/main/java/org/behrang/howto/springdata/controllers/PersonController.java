@@ -10,16 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
-
 /**
  * @author Behrang Saeedzadeh
  */
 @RestController
 @RequestMapping(
-        path = "/persons",
-        consumes = APPLICATION_XML_VALUE,
-        produces = APPLICATION_XML_VALUE
+        path = "/persons"
 )
 public class PersonController {
 
