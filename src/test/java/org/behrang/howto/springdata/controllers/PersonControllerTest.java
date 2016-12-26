@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +21,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.http.MediaType.APPLICATION_XML;
 
 /**
@@ -76,7 +77,7 @@ public class PersonControllerTest {
     @Test
     @DirtiesContext
     public void testSavePersonJson() {
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.setContentType(APPLICATION_JSON_UTF8);
 
         String requestBody = "{\n" +
                 "\t\"firstName\": \"Tin Tin\",\n" +
@@ -98,7 +99,7 @@ public class PersonControllerTest {
     @Test
     @DirtiesContext
     public void testSavePersonFormUrlEncoded() {
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentType(APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("firstName", "Tin Tin");
@@ -114,6 +115,41 @@ public class PersonControllerTest {
         assertThat(responseBody.getFirstName(), equalTo("Tin Tin"));
         assertThat(responseBody.getLastName(), equalTo("Herge"));
         assertThat(responseBody.getDateOfBirth(), equalTo("1907-05-22"));
+    }
+
+    @Test
+    public void testEchoPersonXmlPut() {
+        headers.setContentType(APPLICATION_XML);
+
+        String requestBody = "<person first-name=\"Tin Tin\"></person>";
+
+        final HttpEntity<Object> request = new HttpEntity<>(requestBody, headers);
+
+        final ResponseEntity<Person> response = restTemplate.exchange("/persons/echo", PUT, request, Person.class);
+        assertThat(response.getStatusCode(), equalTo(OK));
+
+        final Person responseBody = response.getBody();
+        assertThat(responseBody.getFirstName(), equalTo("Tin Tin"));
+    }
+
+
+    @Test
+    public void testEchoPersonJsonPut() {
+        headers.setContentType(APPLICATION_JSON_UTF8);
+
+        String requestBody = "{\n" +
+                "\t\"firstName\": \"Tin Tin\",\n" +
+                "\t\"lastName\": \"Harge\",\n" +
+                "\t\"dateOfBirth\", \"1907-05-22\"\n" +
+                "}";
+
+        final HttpEntity<Object> request = new HttpEntity<>(requestBody, headers);
+
+        final ResponseEntity<Person> response = restTemplate.exchange("/persons/echo", PUT, request, Person.class);
+        assertThat(response.getStatusCode(), equalTo(OK));
+
+        final Person responseBody = response.getBody();
+        assertThat(responseBody.getFirstName(), equalTo("Tin Tin"));
     }
 
 }
